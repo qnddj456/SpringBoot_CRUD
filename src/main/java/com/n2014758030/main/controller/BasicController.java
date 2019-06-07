@@ -7,6 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 @Controller
@@ -68,9 +71,17 @@ public class BasicController {
     }
 
     @PostMapping("/basic/delete")
-    public String deleteBasic(@RequestParam(value = "deleteBasicsIdx") List<Long> deleteBasicsIdx, Model model) {
-        for (Long i : deleteBasicsIdx) {
-            basicService.deleteBasic(basicService.findBasicByIdx(i));
+    public String deleteBasic(@RequestParam(value = "deleteBasicsIdx", required = false) List<Long> deleteBasicsIdx,
+                              Model model, HttpServletResponse response) throws IOException {
+        if(deleteBasicsIdx == null) {
+            response.setContentType("text/html; charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            out.println("<script>alert('There is nothing to delete.'); location.href='/';</script>");
+            out.flush();
+        } else {
+            for (Long i : deleteBasicsIdx) {
+                basicService.deleteBasic(basicService.findBasicByIdx(i));
+            }
         }
 
         model.addAttribute("basicList", basicService.findBasicByAll());

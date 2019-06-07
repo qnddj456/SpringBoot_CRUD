@@ -25,13 +25,6 @@ public class MainApplication {
 
     @Bean
     public void init() {
-        profileRepository.save(Profile.builder()
-                .network("트위터")
-                .userName("@home")
-                .url("https://twitter/@home")
-                .createDate(LocalDateTime.now())
-                .build());
-
         basicRepository.save(Basic.builder()
                 .name("홍길동")
                 .label("CEO")
@@ -53,8 +46,12 @@ public class MainApplication {
                 .phone("234-567-8901")
                 .build());
 
-
-
+        profileRepository.save(Profile.builder()
+                .network("트위터")
+                .userName("@home")
+                .url("https://twitter/@home")
+                .createDate(LocalDateTime.now())
+                .build());
 
         profileRepository.save(Profile.builder()
                 .network("페이스북")
@@ -76,7 +73,7 @@ public class MainApplication {
         return (args) -> IntStream.rangeClosed(1, 3).forEach(index -> {
             basicRepository.save(Basic.builder()
                     .name("dummy" + index)
-                    .label("temple" + index)
+                    .label("dummy" + index)
                     .email("dummy" + index + "@dummy.com")
                     .phone("dummy-" + index)
                     .build());

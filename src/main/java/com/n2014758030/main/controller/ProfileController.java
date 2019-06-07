@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -68,11 +71,18 @@ public class ProfileController {
     }
 
     @PostMapping("/profile/delete")
-    public String deleteProfile(@RequestParam(value = "deleteProfileIdx") List<Long> deleteProfileIdx, Model model) {
-        for (Long i : deleteProfileIdx) {
-            profileService.deleteProfile(profileService.findProfileByIdx(i));
+    public String deleteProfile(@RequestParam(value = "deleteProfileIdx", required = false) List<Long> deleteProfileIdx,
+                                Model model, HttpServletResponse response) throws IOException {
+        if(deleteProfileIdx == null) {
+            response.setContentType("text/html; charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            out.println("<script>alert('There is nothing to delete.'); location.href='/';</script>");
+            out.flush();
+        } else {
+            for (Long i : deleteProfileIdx) {
+                profileService.deleteProfile(profileService.findProfileByIdx(i));
+            }
         }
-
         model.addAttribute("basicList", basicService.findBasicByAll());
         model.addAttribute("profileList", profileService.findProfileByAll());
 

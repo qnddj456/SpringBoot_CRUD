@@ -26,6 +26,11 @@
       function trOut(tr) {
         tr.style.backgroundColor = "white";
       }
+
+      function validate() {
+        document.getElementById("deleteBasicsIdx").attributes["required"].length > 0;
+        document.getElementById("deleteProfileIdx").attributes["required"].length > 0;
+      }
     </script>
   </head>
   <body>
